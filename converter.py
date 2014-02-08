@@ -52,6 +52,12 @@ class Converter(object):
     def pushNamespaceTag(self, node):
         self.push_simple_tag(node, 'namespace')
 
+    def pushIncludeTag(self, node):
+        self.push_simple_tag(node, 'include')
+
+    def pushCallTag(self, node):
+        raise NotImplementedError
+
     def pushComment(self, node):
         indent = ' ' * self.indent
         for line in node.text.strip().split('\n'):
