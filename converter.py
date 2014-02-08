@@ -95,6 +95,18 @@ see http://docs.makotemplates.org/en/latest/defs.html#defs-with-content"""
     def pushExpression(self, node):
         raise NotImplementedError
 
+    def pushTextTag(self, node):
+        raise NotImplementedError
+
+    def pushBlockTag(self, node):
+        raise NotImplementedError
+
+    def pushPageTag(self, node):
+        raise NotImplementedError
+
+    def pushCallNamespaceTag(self, node):
+        raise NotImplementedError
+
     def pushDefTag(self, node):
         buf = ' ' * self.indent + '-def ' + node.attributes['name'] + '\n'
         self.buf.append(buf)
