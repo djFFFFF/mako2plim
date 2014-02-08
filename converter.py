@@ -78,7 +78,7 @@ see http://docs.makotemplates.org/en/latest/defs.html#defs-with-content"""
         for attr in ['name', 'import', 'inheritable']:
             if attr in node.attributes:
                 attrs += '%s="%s" ' % (attr, node.attributes[attr])
-        self.buf.append(indent + '-%s ' % name + attrs + file + '\n\n')
+        self.buf.append(indent + '-%s ' % name + attrs + file + '\n')
 
     def pushInheritTag(self, node):
         self.push_simple_tag(node, 'inherit')
