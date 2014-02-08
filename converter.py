@@ -50,13 +50,19 @@ class Converter(object):
         parser.feed(node.content)
 
     def pushNamespaceTag(self, node):
+        self.push_simple_tag(node, 'namespace')
+
+    def push_simple_tag(self, node, name):
         indent = ' ' * self.indent
         file = node.attributes['file'] if 'file' in node.attributes else node.attributes['module']
         attrs = ''
         for attr in ['name', 'import', 'inheritable']:
             if attr in node.attributes:
                 attrs += '%s="%s" ' % (attr, node.attributes[attr])
-        self.buf.append(indent + '-namespace ' + attrs + file + '\n\n')
+        self.buf.append(indent + '-%s' % name + attrs + file + '\n\n')
+
+    def pushInheritTag(self, node):
+        self.push_simple_tag(node, 'inherit')
 
     def pushControlLine(self, node):
         indent = ' ' * (self.indent if node.is_primary else self.indent - 2)
