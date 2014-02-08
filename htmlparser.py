@@ -18,7 +18,7 @@ class Attributes(object):
                 yield k, v
 
 class HTMLPooper(HTMLParser):
-    unindent_tags = ['br', 'link', 'img']
+    unindent_tags = ['br', 'link', 'img', 'input']
 
     def __init__(self, converter):
         HTMLParser.__init__(self)
