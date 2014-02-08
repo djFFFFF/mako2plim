@@ -27,6 +27,6 @@ class Lexer(_Lexer):
             if node.get_children():
                 self.merge_text_and_expr(node)
         if merged_node:
-            nodes.append(node)
+            nodes.append(merged_node)
         tree.nodes = nodes
         return tree

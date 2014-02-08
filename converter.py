@@ -52,6 +52,11 @@ class Converter(object):
     def pushNamespaceTag(self, node):
         self.push_simple_tag(node, 'namespace')
 
+    def pushComment(self, node):
+        indent = ' ' * self.indent
+        for line in node.text.strip().split('\n'):
+            self.buf.append(indent + '/ ' + line + '\n')
+
     def push_simple_tag(self, node, name):
         indent = ' ' * self.indent
         file = node.attributes['file'] if 'file' in node.attributes else node.attributes['module']
@@ -59,7 +64,7 @@ class Converter(object):
         for attr in ['name', 'import', 'inheritable']:
             if attr in node.attributes:
                 attrs += '%s="%s" ' % (attr, node.attributes[attr])
-        self.buf.append(indent + '-%s' % name + attrs + file + '\n\n')
+        self.buf.append(indent + '-%s ' % name + attrs + file + '\n\n')
 
     def pushInheritTag(self, node):
         self.push_simple_tag(node, 'inherit')
@@ -83,3 +88,4 @@ class Converter(object):
         for child in node.get_children():
             self.blahblah(child)
         self.indent -= 2
+        self.buf.append('\n')
