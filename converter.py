@@ -56,7 +56,15 @@ class Converter(object):
         self.push_simple_tag(node, 'include')
 
     def pushCallTag(self, node):
-        raise NotImplementedError
+        print """plim does not support <% call %> tag, you may need to modify this manually.
+see http://docs.makotemplates.org/en/latest/defs.html#defs-with-content"""
+        indent = ' ' * self.indent
+        expr = node.expression.replace('\n', '')
+        self.buf.append(indent + '-call ' + expr + '"' + '\n')
+        self.indent += 2
+        for child in node.get_children():
+            self.blahblah(child)
+        self.indent -= 2
 
     def pushComment(self, node):
         indent = ' ' * self.indent
