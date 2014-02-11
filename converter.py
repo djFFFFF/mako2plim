@@ -19,18 +19,18 @@ class Converter(object):
         return self.input_file + '.plim'
 
     def convert(self):
-        self.blahblah(self.tree)
+        self.poop(self.tree)
         with open(self.output_file, 'w') as o:
             o.write(''.join(self.buf).encode('utf-8'))
 
-    def blahblah(self, node):
-        getattr(self, 'push' + node.__class__.__name__)(node)
+    def poop(self, node):
+        getattr(self, 'poop' + node.__class__.__name__)(node)
 
-    def pushTemplateNode(self, node):
+    def poopTemplateNode(self, node):
         for child in node.get_children():
-            self.blahblah(child)
+            self.poop(child)
 
-    def pushCode(self, node):
+    def poopCode(self, node):
         header = '-py!' if node.ismodule else '-py'
         texts = node.text.strip().split('\n')
         indent = ' ' * self.indent
@@ -45,17 +45,17 @@ class Converter(object):
         if node.ismodule:
             self.buf.append('\n')
 
-    def pushText(self, node):
+    def poopText(self, node):
         parser = HTMLPooper(self)
         parser.feed(node.content)
 
-    def pushNamespaceTag(self, node):
-        self.push_simple_tag(node, 'namespace')
+    def poopNamespaceTag(self, node):
+        self.poop_simple_tag(node, 'namespace')
 
-    def pushIncludeTag(self, node):
-        self.push_simple_tag(node, 'include')
+    def poopIncludeTag(self, node):
+        self.poop_simple_tag(node, 'include')
 
-    def pushCallTag(self, node):
+    def poopCallTag(self, node):
         print """plim does not support <% call %> tag, you may need to modify this manually.
 see http://docs.makotemplates.org/en/latest/defs.html#defs-with-content"""
         indent = ' ' * self.indent
@@ -63,15 +63,15 @@ see http://docs.makotemplates.org/en/latest/defs.html#defs-with-content"""
         self.buf.append(indent + '-call ' + expr + '"' + '\n')
         self.indent += 2
         for child in node.get_children():
-            self.blahblah(child)
+            self.poop(child)
         self.indent -= 2
 
-    def pushComment(self, node):
+    def poopComment(self, node):
         indent = ' ' * self.indent
         for line in node.text.strip().split('\n'):
             self.buf.append(indent + '/ ' + line + '\n')
 
-    def push_simple_tag(self, node, name):
+    def poop_simple_tag(self, node, name):
         indent = ' ' * self.indent
         file = node.attributes['file'] if 'file' in node.attributes else node.attributes['module']
         attrs = ''
@@ -80,10 +80,10 @@ see http://docs.makotemplates.org/en/latest/defs.html#defs-with-content"""
                 attrs += '%s="%s" ' % (attr, node.attributes[attr])
         self.buf.append(indent + '-%s ' % name + attrs + file + '\n')
 
-    def pushInheritTag(self, node):
-        self.push_simple_tag(node, 'inherit')
+    def poopInheritTag(self, node):
+        self.poop_simple_tag(node, 'inherit')
 
-    def pushControlLine(self, node):
+    def poopControlLine(self, node):
         indent = ' ' * (self.indent if node.is_primary else self.indent - 2)
         if node.isend:
             self.indent -= 2
@@ -92,26 +92,26 @@ see http://docs.makotemplates.org/en/latest/defs.html#defs-with-content"""
                 self.indent += 2
             self.buf.append(indent + '-' + node.text.strip(' %:') + '\n')
 
-    def pushExpression(self, node):
+    def poopExpression(self, node):
         raise NotImplementedError
 
-    def pushTextTag(self, node):
+    def poopTextTag(self, node):
         raise NotImplementedError
 
-    def pushBlockTag(self, node):
+    def poopBlockTag(self, node):
         raise NotImplementedError
 
-    def pushPageTag(self, node):
+    def poopPageTag(self, node):
         raise NotImplementedError
 
-    def pushCallNamespaceTag(self, node):
+    def poopCallNamespaceTag(self, node):
         raise NotImplementedError
 
-    def pushDefTag(self, node):
+    def poopDefTag(self, node):
         buf = ' ' * self.indent + '-def ' + node.attributes['name'] + '\n'
         self.buf.append(buf)
         self.indent += 2
         for child in node.get_children():
-            self.blahblah(child)
+            self.poop(child)
         self.indent -= 2
         self.buf.append('\n')
