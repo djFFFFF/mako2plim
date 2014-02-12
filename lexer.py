@@ -18,7 +18,9 @@ class Lexer(_Lexer):
                 if isinstance(node, Text):
                     merged_node.content += node.content
                 else:
-                    merged_node.content += '${' + node.text.strip() + '}'
+                    args = node.escapes_code.args
+                    args = args and '|' + ', '.join(args) or ''
+                    merged_node.content += '${' + node.text.strip() + args + '}'
             else:
                 if merged_node:
                     nodes.append(merged_node)
